@@ -17,7 +17,12 @@ module.exports = function rewire(babel, options) {
         path.node.source.value = `${name}/${index}`;
         path.replaceWithMultiple(
           path.node.specifiers.reduce((declarations, specifier) => {
-            const mapping = mappings[specifier.imported.name];
+            // Only named imports can be mapped to a component's own file.
+            // Default and namespace imports refer to the whole package, so
+            // they stay on the package's index like unmapped named imports.
+            const mapping = t.isImportSpecifier(specifier)
+              ? mappings[specifier.imported.name]
+              : undefined;
 
             if (mapping) {
               const alias = `${name}/${mapping.path}`;
