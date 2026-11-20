@@ -186,7 +186,9 @@ const AppbarContent = ({
             titleStyle,
           ]}
           numberOfLines={isFlexible ? 2 : 1}
-          accessible
+          // With `onPress` the `Pressable` is the only stop: an accessible title
+          // inside it is a second TalkBack and keyboard focus stop on Android
+          accessible={!onPress}
           role={onPress ? 'none' : 'heading'}
           maxFontSizeMultiplier={titleMaxFontSizeMultiplier}
         >

@@ -814,6 +814,31 @@ describe('Appbar.Header', () => {
     expect(screen.getByRole('button')).toBeDisabled();
     expect(screen.queryByRole('heading')).not.toBeOnTheScreen();
   });
+  it('is a single accessibility and focus stop when onPress callback has been passed', async () => {
+    await render(
+      <SafeAreaProvider>
+        <Appbar.Header>
+          <Appbar.Content title="Accessible test" onPress={() => {}} />
+        </Appbar.Header>
+      </SafeAreaProvider>
+    );
+
+    expect(screen.getByText('Accessible test')).toHaveProp('accessible', false);
+    expect(
+      screen.getByRole('button', { name: 'Accessible test' })
+    ).toBeOnTheScreen();
+  });
+  it('keeps the title accessible as a heading when no onPress callback has been passed', async () => {
+    await render(
+      <SafeAreaProvider>
+        <Appbar.Header>
+          <Appbar.Content title="Accessible test" />
+        </Appbar.Header>
+      </SafeAreaProvider>
+    );
+
+    expect(screen.getByText('Accessible test')).toHaveProp('accessible', true);
+  });
 });
 
 describe('AppbarAction', () => {
